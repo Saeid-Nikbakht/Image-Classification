@@ -5,8 +5,7 @@ Created on Mon Mar  1 17:26:20 2021
 @author: Saeid
 """
 
-"""In this python script, CNN, FC and LSTM models are utilized to classify the CIFAR-10
-   dataset."""
+"""In this python script, a CNN model are utilized to classify the CIFAR-10 dataset."""
 
 # Importing required modules
 import numpy as np
@@ -19,11 +18,10 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.activations import relu, softmax
 from tensorflow.keras.models import Model
 
-# Importing mnist class from Utils
+# Importing CIFAR10 class from Utils
 from Utils.image_classifier_cifar import CIFAR10
 
-# Importing the Fashion Mnist dataset and providing an instance from FashionMnist class by chosing the 
-# kind of classification model : "FC", "CNN", and "LSTM"
+# Importing the CIFAR10 dataset and providing an instance from CIFAR10
 from tensorflow.keras.datasets import cifar10
 (X_train, y_train), (X_test, y_test) = cifar10.load_data()
 cifar10 = CIFAR10(X_train, y_train, X_test, y_test)
@@ -90,14 +88,14 @@ model_dict = model.fit(X_train, y_train,
               callbacks = [scheduler],
               batch_size = 128)
 
-# Plotting the loss and accuracy convergence via loss_accuracy function in the Mnist class
+# Plotting the loss and accuracy convergence via loss_accuracy function in the CIFAR10 class
 cifar10.loss_accuracy(model_dict, 10)
 
 # Predicting the test data
 y_pred = np.argmax(model.predict(X_test),axis = 1)
 
-# Plotting the Confusion matrix using the confusion_matrixx function in the Mnist class
+# Plotting the Confusion matrix using the confusion_matrixx function in the CIFAR10 class
 cifar10.confusion_matrixx(y_pred, fontsize = 14,thresh = 50,cmap = plt.cm.Blues)
 
-# Plotting Wrong predictions using wrong_pred class in the Mnist class
+# Plotting Wrong predictions using wrong_pred class in the CIFAR10 class
 cifar10.wrong_pred(y_pred)
