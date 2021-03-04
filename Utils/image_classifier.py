@@ -14,7 +14,7 @@ Original file is located at
     https://colab.research.google.com/drive/1EeYH6GEH6tTDHPsVZ8kbWLbRKZZXmXml
 """
 
-"""In this class, the images of mnist dataset are analyzed.
+"""In this class, some pre- and post-processing functions for image (Mnist) classification are represented.
    Different functions are developed in order to plot and present the training and test datasets.
    Moreover, some functions are presented to show the convergence procedure, wrong predictions and
    confusion matrix.
@@ -28,22 +28,23 @@ from sklearn.metrics import confusion_matrix
 
 class Mnist:
     
-    def __init__(self,X_train, y_train, X_test, y_test):
+    def __init__(self,kind, X_train, y_train, X_test, y_test):
         
         self.X_train = X_train
         self.y_train = y_train
         self.X_test = X_test
         self.y_test = y_test
-        self.label_map = {0: 	"T-shirt/top",
-                         1: 	"Trouser",
-                         2: 	"Pullover",
-                         3: 	"Dress",
-                         4: 	"Coat",
-                         5: 	"Sandal",
-                         6: 	"Shirt",
-                         7: 	"Sneaker",
-                         8: 	"Bag",
-                         9: 	"Ankle boot"}
+        self.kind = kind
+        self.label_map = {0: 	"0",
+                         1: 	"1",
+                         2: 	"2",
+                         3: 	"3",
+                         4: 	"4",
+                         5: 	"5",
+                         6: 	"6",
+                         7: 	"7",
+                         8: 	"8",
+                         9: 	"9"}
     
     # In this function, the information of the mnist dataset is revealed and an example of each class is plotted.
     def data_desciption(self):
@@ -60,6 +61,7 @@ class Mnist:
           print(self.label_map[self.y_train[j]])
         
         fig, axes = plt.subplots(nrows = 1, ncols = 10, figsize = [30,4])
+        fig.suptitle("Example of all classes", fontsize=16)
         for i, ax in enumerate(axes):
           j = np.where(self.y_train == i)[0][1]
           ax.imshow(self.X_train[j].reshape(28,28))
@@ -67,7 +69,7 @@ class Mnist:
           ax.set_yticklabels([])
           ax.set_xlabel(self.label_map[self.y_train[j]], fontsize = 14)
         
-        return (self.label_map, num_classes)
+        return (self.kind, self.label_map, num_classes)
     
     # In this function, the loss and accuracy of the model is plotted.
     def loss_accuracy(self, model_dict, epochs):
@@ -78,6 +80,7 @@ class Mnist:
         val_acc = model_dict.history["val_accuracy"]
         
         fig, [ax1,ax2] = plt.subplots(nrows = 1, ncols = 2,figsize = [15,8])
+        fig.suptitle("Loss and Accuracy convergence", fontsize=16)
         ax1.plot(np.arange(epochs),loss, label = "loss")
         ax1.plot(np.arange(epochs),val_loss, label = "val_loss")
         ax1.set_xlabel("Epochs")
@@ -102,6 +105,7 @@ class Mnist:
         plt.imshow(cm, cmap = cmap)
         plt.xlabel("Predicted class", fontsize = fontsize)
         plt.ylabel("True class", fontsize = fontsize)
+        plt.title("Confusion Matrix")
         plt.xticks(np.arange(num_classes),list(self.label_map.values()), fontsize = fontsize,rotation = 45)
         plt.yticks(np.arange(num_classes),list(self.label_map.values()), fontsize = fontsize)
         plt.colorbar()
@@ -117,6 +121,7 @@ class Mnist:
         Wrong_pred_idx = np.where(self.y_test != y_pred)[0]
         random_wrong_pred = np.random.choice(Wrong_pred_idx, size = 20)
         fig, axes = plt.subplots(nrows = 4, ncols = 5, figsize = [15,10])
+        fig.suptitle("Random Wrong Predictions", fontsize=16)
         plt.subplots_adjust(left = None, bottom = None, right = None, top = None, wspace = 1, hspace = 1)
         for i, ax in enumerate(axes.reshape(-1)):
             j = random_wrong_pred[i]
